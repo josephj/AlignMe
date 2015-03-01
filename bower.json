@@ -1,0 +1,25 @@
+{
+  "name": "tagla",
+  "main": "src/alignme.js",
+  "version": "0.0.1",
+  "homepage": "https://github.com/josephj/align-me",
+  "authors": [
+    "josephj <josephj6802@gmail.com>"
+  ],
+  "description": "A JavaScript utility which aligns position of HTML elements.",
+  "keywords": [
+    "align",
+    "position"
+  ],
+  "license": "MIT",
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "tests"
+  ],
+  "devDependencies": {
+    "jquery": "1.11.0",
+    "draggabilly": "~1.1.1"
+  }
+}
