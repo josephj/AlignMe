@@ -78,7 +78,11 @@ p {
 
     // Overlay
     $overlay = $('.overlay');
-    alignMe = new AlignMe($overlay, {relateTo: '.draggable', constrainBy: '.parent', skipViewport: false});
+    alignMe = new AlignMe($overlay, {
+        relateTo: '.draggable',
+        constrainBy: '.parent',
+        skipViewport: false
+    });
     alignMe.align();
 
     // Drag

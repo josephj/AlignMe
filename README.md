@@ -1,15 +1,16 @@
-# align-me
+# AlignMe
 
 A JavaScript utility which aligns position of HTML elements.
 
 ```js
-$('.flyout').alignme({
-  auto: true,
-  container: '#parent',
-  relateTo: '.tag'
+var alignMe = new AlignMe($overlay, {
+    relateTo: '.draggable',
+    constrainBy: '.parent',
+    skipViewport: false
 });
+alignMe.align();
 ```
 
-* `auto` Aligning element automatically.
-* `relateTo` Selector of element which you are going to align with.
-* `container` Selector of constrait element.
+* `relateTo` Selector of element which you are going to align with. This one is required.
+* `constrainBy` Selector of constrait element. Default is `null`.
+* `skipViewport` Whether to ignore the viewport or not. Default is `false`.
