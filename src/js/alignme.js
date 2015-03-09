@@ -39,55 +39,61 @@ proto = {
 
         return [
             // lblt ['left', 'bottom'], ['left', 'top']
-            {left: relateToData.left, top: relateToData.top - overlayData.height},
+            {left: relateToData.left, top: relateToData.top - overlayData.height, name: 'lblt'},
             // cbct ['center', 'bottom'], ['center', 'top']
-            {left: center, top: relateToData.top - overlayData.height},
+            // {left: center, top: relateToData.top - overlayData.height, name: 'cbct'}, // TODO
             // rbrt ['right', 'bottom'], ['right', 'top']
-            {left: relateToData.right - overlayData.width, top: relateToData.top - overlayData.height},
+            {left: relateToData.right - overlayData.width, top: relateToData.top - overlayData.height, name: 'rbrt'},
 
-            // tlrt ['top', 'left'], ['right', 'top']
-            {left: relateToData.right, top: relateToData.top},
+            // ltrt ['left', 'top'], ['right', 'top']
+            {left: relateToData.right, top: relateToData.top, name: 'ltrt'},
             // lbrb ['left', 'bottom'], ['right', 'bottom']
-            {left: relateToData.right, top: relateToData.bottom - overlayData.height},
+            {left: relateToData.right, top: relateToData.bottom - overlayData.height, name: 'lbrb'},
 
             // rtrb ['right', 'top'], ['right', 'bottom']
-            {left: relateToData.right - overlayData.width, top: relateToData.bottom},
+            {left: relateToData.right - overlayData.width, top: relateToData.bottom, name: 'rtrb'},
             // ctcb ['center', 'top'], ['center', 'bottom']
-            {left: center, top: relateToData.bottom},
+            // {left: center, top: relateToData.bottom, name: 'ctcb'}, // TODO
             // ltlb ['left', 'top'], ['left', 'bottom']
-            {left: relateToData.left, top: relateToData.bottom},
+            {left: relateToData.left, top: relateToData.bottom, name: 'ltlb'},
 
             // rblb ['right', 'bottom'], ['left', 'bottom']
-            {left: relateToData.left - overlayData.width, top: relateToData.bottom - overlayData.height},
+            {left: relateToData.left - overlayData.width, top: relateToData.bottom - overlayData.height, name: 'rblb'},
             // rtlt ['right', 'top'], ['left', 'top']
-            {left: relateToData.left - overlayData.width, top: relateToData.top}
+            {left: relateToData.left - overlayData.width, top: relateToData.top, name: 'rtlt'}
         ];
     },
     align: function () {
-        var $window = $(window);
-        var topmost = $window.scrollTop();
-        var bottommost = topmost + $window.height();
-
         var that = this,
             hasBest = false,
+            pos,
             positions,
             overlay = that.overlay,
             relateTo = that.relateTo,
             constrainBy = that.constrainBy,
-            offset = overlay.offset(),
+            // Overlay
             overlayData = that.getPoints(overlay),
             relateToData = that.getPoints(relateTo),
-            constrainByData = that.getPoints(constrainBy);
+            constrainByData = that.getPoints(constrainBy),
+            // Constrain by viewport
+            $window,
+            topmost,
+            bottommost;
 
         // Get all possible positions
         positions = that.getPositions(overlayData, relateToData);
 
         if (!that.skipViewport) {
+            $window = $(window);
             topmost = $window.scrollTop();
             bottommost = topmost + $window.height();
-            constrainByData.top = topmost;
-            constrainByData.bottom = bottommost;
-            constrainByData.height = bottommost - topmost;
+            if (topmost > constrainByData) {
+                constrainByData.top = topmost;
+            }
+            if (bottommost < constrainByData.bottom) {
+                constrainByData.bottom = bottommost;
+                constrainByData.height = bottommost - topmost;
+            }
         }
 
         _.each(positions, function (pos) {
@@ -102,7 +108,7 @@ proto = {
                 pos.left >= constrainByData.left &&
                 pos.top >= constrainByData.top &&
                 pos.left + overlayData.width <= constrainByData.right &&
-                pos.top + overlayData.height <= constrainByData.height
+                pos.top + overlayData.height <= constrainByData.bottom
             ) {
                 hasBest = true;
                 // Inside distance. The more the better.
@@ -115,10 +121,13 @@ proto = {
 
         if (hasBest) {
             // Get the one with the largest distance
-            overlay.offset(_.max(positions, function(pos) {return pos.inDistance;}));
+            pos = _.max(positions, function (pos) {return pos.inDistance;});
+            overlay.offset(pos);
+
         } else {
             // Get the one with the smallest distance
-            overlay.offset(_.min(positions, function(pos) {return pos.outDistance;}));
+            pos = _.min(positions, function (pos) {return pos.outDistance;});
+            overlay.offset(pos);
         }
     }
 };
