@@ -104,18 +104,23 @@ proto = {
                 constrainByData.bottom - pos.top + overlayData.height,
                 pos.left - constrainByData.left
             ];
+            pos.right = pos.left + overlayData.width;
+            pos.bottom = pos.top + overlayData.height;
             if (
                 pos.left >= constrainByData.left &&
                 pos.top >= constrainByData.top &&
-                pos.left + overlayData.width <= constrainByData.right &&
-                pos.top + overlayData.height <= constrainByData.bottom
+                pos.right <= constrainByData.right &&
+                pos.bottom <= constrainByData.bottom
             ) {
                 hasBest = true;
                 // Inside distance. The more the better.
                 pos.inDistance = Math.min.apply(null, distances);
             } else {
-                // Outside distance. The less the better.
-                pos.outDistance = Math.max.apply(null, distances);
+                pos.distances = distances;
+                // The more overlap the better
+                pos.overlapSize =
+                    (Math.min(pos.right, constrainByData.right) - Math.max(pos.left, constrainByData.left)) *
+                    (Math.min(pos.bottom, constrainByData.bottom) - Math.max(pos.top, constrainByData.top)) ;
             }
         });
 
@@ -126,7 +131,7 @@ proto = {
 
         } else {
             // Get the one with the smallest distance
-            pos = _.min(positions, function (pos) {return pos.outDistance;});
+            pos = _.max(positions, function (pos) {return pos.overlapSize;});
             overlay.offset(pos);
         }
     }
