@@ -1,13 +1,13 @@
 # AlignMe
 
-A JavaScript utility which automatically aligns position of HTML elements.
+A JavaScript utility which automatically aligns position of an overlay element.
 
 ![AlignMe](https://stackla-ui-kit.s3.amazonaws.com/AlignMe.png)
 
 ## Usage
 
 ```html
-<script src="dist/align-me.min.js"></script>
+<script src="dist/alignme.min.js"></script>
 ```
 
 
