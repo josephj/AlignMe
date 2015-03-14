@@ -1,10 +1,15 @@
 {
   "name": "alignme",
-  "version": "0.0.1",
+  "version": "0.0.2",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
   },
-  "author": "josephj6802@gmail.com",
+  "main": "dist/alignme.min.js",
+  "repository": {
+    "type": "git",
+    "url": "http://github.com/josephj/tagla.git"
+  },
+  "author": "josephj <josephj6802@gmail.com>",
   "license": "MIT",
   "dependencies": {},
   "devDependencies": {
