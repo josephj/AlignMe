@@ -1,7 +1,4 @@
-/*global window, $, document */
-var _ = require('lodash'),
-    proto = {};
-
+/*global window, $, define, document */
 function AlignMe(overlay, options) {
     var that = this;
     // Configurable Attributes
@@ -17,7 +14,24 @@ function AlignMe(overlay, options) {
     }
 }
 
-proto = {
+var getMax = function (obj, attr) {
+    var max = 0,
+        maxItem,
+        i, o;
+
+    for (i in obj) {
+        if (obj.hasOwnProperty(i)) {
+            o = obj[i];
+            if (o[attr] > max) {
+                max = o[attr];
+                maxItem = o;
+            }
+        }
+    }
+    return maxItem;
+};
+
+var proto = {
     getPoints: function ($el) {
         var that = this,
             offset = $el.offset(),
@@ -66,6 +80,7 @@ proto = {
     align: function () {
         var that = this,
             hasBest = false,
+            bestPos,
             pos,
             positions,
             overlay = that.overlay,
@@ -78,7 +93,8 @@ proto = {
             // Constrain by viewport
             $window,
             topmost,
-            bottommost;
+            bottommost,
+            i, distances;
 
         // Get all possible positions
         positions = that.getPositions(overlayData, relateToData);
@@ -96,48 +112,53 @@ proto = {
             }
         }
 
-        _.each(positions, function (pos) {
-            // 4 distances to border of constrain
-            var distances = [
-                pos.top - constrainByData.top,
-                constrainByData.right - pos.left + overlayData.width,
-                constrainByData.bottom - pos.top + overlayData.height,
-                pos.left - constrainByData.left
-            ];
-            pos.right = pos.left + overlayData.width;
-            pos.bottom = pos.top + overlayData.height;
-            if (
-                pos.left >= constrainByData.left &&
-                pos.top >= constrainByData.top &&
-                pos.right <= constrainByData.right &&
-                pos.bottom <= constrainByData.bottom
-            ) {
-                hasBest = true;
-                // Inside distance. The more the better.
-                pos.inDistance = Math.min.apply(null, distances);
-            } else {
-                pos.distances = distances;
-                // The more overlap the better
-                pos.overlapSize =
-                    (Math.min(pos.right, constrainByData.right) - Math.max(pos.left, constrainByData.left)) *
-                    (Math.min(pos.bottom, constrainByData.bottom) - Math.max(pos.top, constrainByData.top)) ;
+        for (i in positions) {
+            if (positions.hasOwnProperty(i)) {
+                pos = positions[i];
+                // 4 distances to border of constrain
+                distances = [
+                    pos.top - constrainByData.top,
+                    constrainByData.right - pos.left + overlayData.width,
+                    constrainByData.bottom - pos.top + overlayData.height,
+                    pos.left - constrainByData.left
+                ];
+                pos.right = pos.left + overlayData.width;
+                pos.bottom = pos.top + overlayData.height;
+                if (
+                    pos.left >= constrainByData.left &&
+                    pos.top >= constrainByData.top &&
+                    pos.right <= constrainByData.right &&
+                    pos.bottom <= constrainByData.bottom
+                ) {
+                    hasBest = true;
+                    // Inside distance. The more the better.
+                    pos.inDistance = Math.min.apply(null, distances);
+                } else {
+                    pos.distances = distances;
+                    // The more overlap the better
+                    pos.overlapSize =
+                        (Math.min(pos.right, constrainByData.right) - Math.max(pos.left, constrainByData.left)) *
+                        (Math.min(pos.bottom, constrainByData.bottom) - Math.max(pos.top, constrainByData.top)) ;
+                }
             }
-        });
-
-        if (hasBest) {
-            // Get the one with the largest distance
-            pos = _.max(positions, function (pos) {return pos.inDistance;});
-            overlay.offset(pos);
-
-        } else {
-            // Get the one with the smallest distance
-            pos = _.max(positions, function (pos) {return pos.overlapSize;});
-            overlay.offset(pos);
         }
+
+        bestPos = (hasBest) ? getMax(positions, 'inDistance') : getMax(positions, 'overlapSize');
+        overlay.offset(bestPos);
     }
 };
 
-_.extend(AlignMe.prototype, proto);
+$.extend(AlignMe.prototype, proto);
 
-window.AlignMe = AlignMe;
+if (typeof exports === 'object' && exports) { // CommonJS
+    module.exports = AlignMe;
+} else if (typeof define === 'function' && define.amd) { // AMD
+    define(['exports'], AlignMe);
+}
+
+if (window.Stackla) { // Vanilla JS
+    window.Stackla.AlignMe = AlignMe;
+} else {
+    window.AlignMe = AlignMe;
+}
 
