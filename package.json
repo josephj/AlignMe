@@ -1,10 +1,10 @@
 {
   "name": "alignme",
-  "version": "0.0.3",
+  "version": "0.0.4",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
   },
-  "main": "dist/alignme.min.js",
+  "main": "dist/alignme.js",
   "repository": {
     "type": "git",
     "url": "http://github.com/josephj/tagla.git"
