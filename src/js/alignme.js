@@ -191,15 +191,15 @@ AlignMe.prototype.align = function () {
     return bestPos;
 };
 
-//if (typeof exports === 'object' && exports) { // CommonJS
-module.exports = AlignMe;
-//} else if (typeof define === 'function' && define.amd) { // AMD
-    //define(['exports'], AlignMe);
-//}
-
 if (window.Stackla) { // Vanilla JS
     window.Stackla.AlignMe = AlignMe;
 } else {
     window.AlignMe = AlignMe;
 }
+
+//if (typeof exports === 'object' && exports) { // CommonJS
+module.exports = AlignMe;
+//} else if (typeof define === 'function' && define.amd) { // AMD
+    //define(['exports'], AlignMe);
+//}
 
