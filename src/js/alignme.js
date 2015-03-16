@@ -192,11 +192,11 @@ AlignMe.prototype.align = function () {
     return bestPos;
 };
 
-//if (window.Stackla) { // Vanilla JS
-    //window.Stackla.AlignMe = AlignMe;
-//} else {
-    //window.AlignMe = AlignMe;
-//}
+if (window.Stackla) { // Vanilla JS
+    window.Stackla.AlignMe = AlignMe;
+} else {
+    window.AlignMe = AlignMe;
+}
 
 //if (typeof exports === 'object' && exports) { // CommonJS
 //} else if (typeof define === 'function' && define.amd) { // AMD
