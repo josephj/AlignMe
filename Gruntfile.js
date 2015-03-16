@@ -27,7 +27,7 @@ module.exports = function (grunt) {
             },
             min: {
                 src: './src/js/' + NAME + '.js',
-                dest: './dist/' + NAME + '.min.js',
+                dest: './dist/' + NAME + '.js',
                 browserifyOptions: {
                     debug: false
                 }
@@ -38,7 +38,7 @@ module.exports = function (grunt) {
         },
         uglify: {
             main: {
-                src: './dist/' + NAME + '.min.js',
+                src: './dist/' + NAME + '.js',
                 dest: './dist/' + NAME + '.min.js'
             }
         },
