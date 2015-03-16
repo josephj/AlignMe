@@ -1,1 +1,1 @@
-module.exports = exports = require('./dist/alignme.js');
+module.exports = exports = require('./src/js/alignme.js');

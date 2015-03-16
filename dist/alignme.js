@@ -17,6 +17,7 @@
  * @param {HTMLElement} overlay Overlay element
  * @param {Object} options Configurable options
  */
+
 function AlignMe(overlay, options) {
     var that = this;
 
@@ -194,17 +195,17 @@ AlignMe.prototype.align = function () {
     return bestPos;
 };
 
-if (window.Stackla) { // Vanilla JS
-    window.Stackla.AlignMe = AlignMe;
-} else {
-    window.AlignMe = AlignMe;
-}
+//if (window.Stackla) { // Vanilla JS
+    //window.Stackla.AlignMe = AlignMe;
+//} else {
+    //window.AlignMe = AlignMe;
+//}
 
 //if (typeof exports === 'object' && exports) { // CommonJS
-module.exports = AlignMe;
 //} else if (typeof define === 'function' && define.amd) { // AMD
     //define(['exports'], AlignMe);
 //}
+module.exports = AlignMe;
 
 
 },{}]},{},[1]);
